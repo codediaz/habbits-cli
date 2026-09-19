@@ -4,11 +4,11 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
 
 ## Fase 0 — Preparación
 
-- [ ] **T01 · Esqueleto del paquete** — RF: —
+- [x] **T01 · Esqueleto del paquete** — RF: —
   Crear `habits/__init__.py`, `habits/__main__.py` (que llama a `cli.main()`), `core.py`, `storage.py` y `cli.py` vacíos, `tests/` y `pyproject.toml` con `requires-python >= 3.12` y la configuración de pytest.
   Hecho cuando: `python -m habits` se ejecuta sin traceback y `pytest -q` termina con "no tests ran".
 
-- [ ] **T02 · Test de imports (RNF-2)** — RF: RNF-2
+- [x] **T02 · Test de imports (RNF-2)** — RF: RNF-2
   `tests/test_nfr.py`: analiza con `ast` los imports de `habits/` y solo permite la biblioteca estándar, sin módulos de red (`socket`, `http`, `urllib`…). Comprueba también que `core.py` no importa `json`, `os`, `pathlib`, `sys`, `datetime.datetime.now`, `input` ni `print`.
   Hecho cuando: el test pasa con el esqueleto y falla si se añade `import requests` a cualquier módulo.
 
