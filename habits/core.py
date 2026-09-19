@@ -1,5 +1,7 @@
 """Pure domain logic: no I/O, no system clock."""
 
+import unicodedata
+
 
 class HabitError(Exception):
     """Base class for domain errors; str() is the user message without "Error: "."""
@@ -37,3 +39,24 @@ class InvalidDateError(HabitError):
         super().__init__(
             f"la fecha «{text}» no es válida (usa AAAA-MM-DD, entre 2000-01-01 y hoy)."
         )
+
+
+def normalize_name(raw: str) -> str:
+    """Apply RF-0 normalization: NFC, Unicode spaces collapsed to one and trimmed.
+
+    Only space separators (category Zs) count as spaces; tabs and other
+    control characters are kept so that validation can reject them.
+    """
+    text = unicodedata.normalize("NFC", raw)
+    words: list[str] = []
+    current: list[str] = []
+    for char in text:
+        if unicodedata.category(char) == "Zs":
+            if current:
+                words.append("".join(current))
+                current = []
+        else:
+            current.append(char)
+    if current:
+        words.append("".join(current))
+    return " ".join(words)

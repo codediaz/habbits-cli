@@ -8,6 +8,7 @@ from habits.core import (
     HabitNotFoundError,
     InvalidDateError,
     InvalidNameError,
+    normalize_name,
 )
 
 
@@ -71,3 +72,42 @@ def test_rf10_errors_keep_their_data() -> None:
     assert DuplicateHabitError("Leer").name == "Leer"
     assert HabitNotFoundError("Leer").name == "Leer"
     assert InvalidDateError("2026-9-1").text == "2026-9-1"
+
+
+# --- T04: name normalization (RF-0) ---
+
+
+def test_rf0_normalize_strips_edge_spaces() -> None:
+    assert normalize_name("  Leer  ") == "Leer"
+
+
+def test_rf0_normalize_collapses_internal_spaces() -> None:
+    assert normalize_name("Leer   un  libro") == "Leer un libro"
+
+
+def test_rf0_normalize_treats_unicode_spaces_as_spaces() -> None:
+    # NBSP, en space, ideographic space
+    assert normalize_name("\u00a0Leer\u2002\u00a0libro\u3000") == "Leer libro"
+
+
+def test_rf0_normalize_converts_nfd_to_nfc() -> None:
+    decomposed = "Ingle\u0301s"  # "e" + combining acute accent
+    assert normalize_name(decomposed) == "Ingl\u00e9s"
+    assert len(normalize_name(decomposed)) == 6
+
+
+def test_rf0_normalize_keeps_internal_tab() -> None:
+    # A tab is not a space for RF-0: it must survive so validation can reject it.
+    assert normalize_name("Leer\tlibro") == "Leer\tlibro"
+
+
+def test_rf0_normalize_keeps_edge_tab() -> None:
+    assert normalize_name(" \tLeer ") == "\tLeer"
+
+
+def test_rf0_normalize_only_spaces_gives_empty() -> None:
+    assert normalize_name(" \u00a0  ") == ""
+
+
+def test_rf0_normalize_keeps_case_and_other_characters() -> None:
+    assert normalize_name("-Leer 2 ÑANDÚ") == "-Leer 2 ÑANDÚ"

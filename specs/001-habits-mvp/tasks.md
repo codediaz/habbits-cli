@@ -18,7 +18,7 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
   `HabitError` como base, con las subclases `InvalidNameError`, `DuplicateHabitError`, `HabitNotFoundError` e `InvalidDateError`. Cada una lleva el texto de su mensaje E-x.
   Hecho cuando: un test comprueba que `str()` de cada excepción coincide con la tabla de mensajes de la spec.
 
-- [ ] **T04 · Normalizar nombres** — RF: RF-0
+- [x] **T04 · Normalizar nombres** — RF: RF-0
   `normalize_name(raw) -> str`: normaliza a NFC, sustituye cada secuencia de caracteres `Zs` por un espacio y recorta los extremos.
   Hecho cuando: pasan los tests de NBSP, espacios internos repetidos, espacios en los extremos y NFD→NFC, y un tabulador interno se conserva.
 
