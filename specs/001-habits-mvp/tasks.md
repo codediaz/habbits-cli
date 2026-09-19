@@ -14,7 +14,7 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
 
 ## Fase 1 — Núcleo (`core.py`, sin E/S)
 
-- [ ] **T03 · Excepciones de dominio** — RF: RF-10
+- [x] **T03 · Excepciones de dominio** — RF: RF-10
   `HabitError` como base, con las subclases `InvalidNameError`, `DuplicateHabitError`, `HabitNotFoundError` e `InvalidDateError`. Cada una lleva el texto de su mensaje E-x.
   Hecho cuando: un test comprueba que `str()` de cada excepción coincide con la tabla de mensajes de la spec.
 
