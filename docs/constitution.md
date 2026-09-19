@@ -8,4 +8,6 @@
 6. **Persistencia simple.** Los datos viven en un único JSON local gestionado solo por `habits/storage.py`; su formato solo cambia si antes cambia la spec.
 7. **Idioma.** Los identificadores y comentarios de código van en inglés; los mensajes al usuario, en español.
 
-<!-- Cómo comprobarlo: revisar los imports (1, 3), buscar la spec vinculada (2), ejecutar pytest (5). -->
+Las specs describen el qué y el porqué; las rutas y la arquitectura solo aparecen en esta constitución y en los planes.
+
+> Cómo comprobarlo: revisar los imports (1, 3), buscar la spec vinculada (2), ejecutar pytest (5).
