@@ -82,27 +82,27 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
 
 ## Fase 3 — CLI (`cli.py`)
 
-- [ ] **T19 · Parser y errores de uso** — RF: RF-10
+- [x] **T19 · Parser y errores de uso** — RF: RF-10
   `argparse` con los subcomandos `add`, `done`, `undo`, `list`, `rename` y `delete` (con `--date` en `done` y `undo`), los textos en español, E-1 y salida 2. `main(argv=None) -> int`.
   Hecho cuando: pasan los tests de comando desconocido → 2 con "Error: uso incorrecto", argumento que falta → 2 y argumento que sobra → 2.
 
-- [ ] **T20 · Ruta de datos, "hoy" y errores de dominio** — RF: RF-3, RF-9, RF-10
+- [x] **T20 · Ruta de datos, "hoy" y errores de dominio** — RF: RF-3, RF-9, RF-10
   Resolver la ruta con `HABITS_FILE` o `~/.habits.json`; calcular `today` una sola vez y hacerlo sustituible en los tests; capturar `HabitError` y `StorageError` → stderr y salida 1.
   Hecho cuando: un test con `HABITS_FILE` en `tmp_path` y un archivo corrupto devuelve 1, muestra E-5 por stderr y no modifica el archivo.
 
-- [ ] **T21 · Comandos `add` y `list`** — RF: RF-1, RF-6
+- [x] **T21 · Comandos `add` y `list`** — RF: RF-1, RF-6
   Hecho cuando: `add Leer` muestra M-1 y sale con 0; repetirlo muestra E-2 y sale con 1; `list` muestra M-7 si no hay hábitos y las líneas M-6 con `1 día` o `N días` y `[x]`/`[ ]`.
 
-- [ ] **T22 · Comandos `done` y `undo`** — RF: RF-3, RF-4, RF-5
+- [x] **T22 · Comandos `done` y `undo`** — RF: RF-3, RF-4, RF-5
   Hecho cuando: pasan los tests de M-2, M-3 (salida 0), M-4, M-5 (salida 0), `--date` válida, `--date` inválida → E-4 y salida 1, y hábito inexistente → E-3 y salida 1.
 
-- [ ] **T23 · Comando `rename`** — RF: RF-7
+- [x] **T23 · Comando `rename`** — RF: RF-7
   Hecho cuando: pasan los tests de M-8 y salida 0, E-2 y salida 1, y la conservación del historial comprobada con `list`.
 
-- [ ] **T24 · Comando `delete` con confirmación** — RF: RF-8
+- [x] **T24 · Comando `delete` con confirmación** — RF: RF-8
   Hecho cuando: con `input` simulado, "s", "S" y " s " borran (M-10, 0); "n", "si", "sí" y vacío cancelan (M-11, 0); EOF cancela (M-11, 0); Ctrl+C cancela y sale con 130; en ningún caso de cancelación cambia el archivo.
 
-- [ ] **T25 · Nombres que empiezan por "-"** — RF: RF-0, RF-10
+- [x] **T25 · Nombres que empiezan por "-"** — RF: RF-0, RF-10
   Hecho cuando: `add -- -leer` crea «-leer» (M-1), y `add -leer` sin `--` sale con 2.
 
 ## Fase 4 — Cierre
