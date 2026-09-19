@@ -26,39 +26,39 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
   `validate_name(raw) -> str`: normaliza y rechaza con E-0 un nombre vacío, de más de 50 code points o con caracteres no imprimibles.
   Hecho cuando: pasan los tests de vacío, solo espacios, 50 (válido), 51 (rechazado), tabulador interno, nombre numérico y nombre que empieza por "-" (válido).
 
-- [ ] **T06 · Clave de comparación y búsqueda** — RF: RF-0, RF-2
+- [x] **T06 · Clave de comparación y búsqueda** — RF: RF-0, RF-2
   `name_key(name) -> str` (`casefold`) y `find_habit(data, name) -> dict` (lanza E-3 si no existe).
   Hecho cuando: pasan los tests de "Leer"/"LEER" (iguales), "ß"/"ss" (iguales), "Inglés"/"ingles" (distintos), NFC/NFD (iguales) y hábito inexistente → `HabitNotFoundError`.
 
-- [ ] **T07 · Crear hábito** — RF: RF-1
+- [x] **T07 · Crear hábito** — RF: RF-1
   `add_habit(data, raw_name) -> str`: valida, rechaza un duplicado con E-2 y añade `{"name", "done": []}`.
   Hecho cuando: pasan los tests de alta correcta, duplicado con otras mayúsculas y nombre inválido, y los datos de entrada no cambian cuando hay error.
 
-- [ ] **T08 · Validar fechas** — RF: RF-4
+- [x] **T08 · Validar fechas** — RF: RF-4
   `parse_date(text, today) -> date`: acepta solo `AAAA-MM-DD` con ceros a la izquierda, entre 2000-01-01 y `today`; en otro caso lanza E-4.
   Hecho cuando: pasan los tests de hoy, 2000-01-01, 1999-12-31, mañana, `2026-02-30`, `2026-13-01`, `2026-9-1` y `19/09/2026`.
 
-- [ ] **T09 · Marcar un día** — RF: RF-3, RF-4
+- [x] **T09 · Marcar un día** — RF: RF-3, RF-4
   `mark_done(data, name, day) -> bool` (devuelve False si ya estaba marcado). Mantiene `done` ordenado y sin repeticiones.
   Hecho cuando: pasan los tests de marcar hoy, marcar dos veces (devuelve False y no cambia nada), marcar un día pasado y marcar de forma desordenada (queda ordenado).
 
-- [ ] **T10 · Desmarcar un día** — RF: RF-5
+- [x] **T10 · Desmarcar un día** — RF: RF-5
   `unmark_done(data, name, day) -> bool` (devuelve False si no estaba marcado).
   Hecho cuando: pasan los tests de desmarcar un día marcado, uno no marcado y un hábito inexistente.
 
-- [ ] **T11 · Calcular la racha** — RF: RF-6
+- [x] **T11 · Calcular la racha** — RF: RF-6
   `current_streak(done_dates, today) -> int` según el pseudocódigo del plan.
   Hecho cuando: pasan los tests de racha 0, solo hoy, hoy sin marcar y ayer marcado, hueco de un día, historial desordenado, 28-feb→1-mar, 31-dic→1-ene, 29 de febrero, desmarcar en mitad de una racha, desmarcar hoy con ayer marcado, fechas futuras ignoradas y una racha de 3 años.
 
-- [ ] **T12 · Filas del listado** — RF: RF-6
+- [x] **T12 · Filas del listado** — RF: RF-6
   `list_rows(data, today) -> list[tuple[str, bool, int]]` con el nombre, si está hecho hoy y la racha, en orden por `(casefold, nombre)`.
   Hecho cuando: pasan los tests de lista vacía, orden alfabético sin mayúsculas, desempate entre "Leer" y "leer" (si llegan a coexistir en los datos) y el indicador de hecho hoy.
 
-- [ ] **T13 · Renombrar hábito** — RF: RF-7
+- [x] **T13 · Renombrar hábito** — RF: RF-7
   `rename_habit(data, old, new) -> tuple[str, str]`: valida, rechaza con E-2 si el nombre es de otro hábito, permite el propio con otras mayúsculas y conserva `done`.
   Hecho cuando: pasan los tests de renombrado correcto con el historial intacto, "leer"→"Leer" (aceptado), nombre de otro hábito, nombre vacío, 51 caracteres y hábito inexistente.
 
-- [ ] **T14 · Borrar hábito** — RF: RF-8
+- [x] **T14 · Borrar hábito** — RF: RF-8
   `remove_habit(data, name) -> str`: elimina el hábito y su historial.
   Hecho cuando: pasan los tests de borrado correcto (el hábito ya no aparece en `list_rows`) y hábito inexistente → E-3.
 
