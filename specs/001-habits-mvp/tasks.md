@@ -64,19 +64,19 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
 
 ## Fase 2 — Persistencia (`storage.py`)
 
-- [ ] **T15 · Cargar datos válidos** — RF: RF-9
+- [x] **T15 · Cargar datos válidos** — RF: RF-9
   `load(path) -> dict`: un archivo inexistente devuelve `{"version": 1, "habits": []}`; se lee con `utf-8-sig`.
   Hecho cuando: pasan los tests de archivo inexistente, archivo válido y archivo con BOM.
 
-- [ ] **T16 · Detectar datos corruptos** — RF: RF-9
+- [x] **T16 · Detectar datos corruptos** — RF: RF-9
   Validar el esquema al cargar y lanzar `StorageError` (E-5) si no se cumple.
   Hecho cuando: pasan los tests de archivo vacío, JSON inválido, Latin-1, raíz que no es un objeto, `version` ausente o desconocida, `name` vacío, fecha inválida, fecha repetida y nombres equivalentes repetidos, y en todos el archivo sigue igual byte a byte.
 
-- [ ] **T17 · Guardado atómico** — RF: RF-9
+- [x] **T17 · Guardado atómico** — RF: RF-9
   `save(path, data)`: escribe en un archivo temporal del mismo directorio y usa `os.replace`; crea el directorio si falta; ordena `done`; escribe UTF-8 con `ensure_ascii=False`.
   Hecho cuando: pasan los tests de ida y vuelta, directorio inexistente creado y fallo simulado de `os.replace` con el original intacto.
 
-- [ ] **T18 · Error de escritura** — RF: RF-9, RF-10
+- [x] **T18 · Error de escritura** — RF: RF-9, RF-10
   Convertir `OSError` al guardar en `StorageWriteError` (E-6).
   Hecho cuando: un test con un directorio sin permisos de escritura lanza `StorageWriteError` y el archivo anterior no cambia.
 
