@@ -22,7 +22,7 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
   `normalize_name(raw) -> str`: normaliza a NFC, sustituye cada secuencia de caracteres `Zs` por un espacio y recorta los extremos.
   Hecho cuando: pasan los tests de NBSP, espacios internos repetidos, espacios en los extremos y NFD→NFC, y un tabulador interno se conserva.
 
-- [ ] **T05 · Validar nombres** — RF: RF-0
+- [x] **T05 · Validar nombres** — RF: RF-0
   `validate_name(raw) -> str`: normaliza y rechaza con E-0 un nombre vacío, de más de 50 code points o con caracteres no imprimibles.
   Hecho cuando: pasan los tests de vacío, solo espacios, 50 (válido), 51 (rechazado), tabulador interno, nombre numérico y nombre que empieza por "-" (válido).
 

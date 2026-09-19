@@ -9,6 +9,7 @@ from habits.core import (
     InvalidDateError,
     InvalidNameError,
     normalize_name,
+    validate_name,
 )
 
 
@@ -111,3 +112,47 @@ def test_rf0_normalize_only_spaces_gives_empty() -> None:
 
 def test_rf0_normalize_keeps_case_and_other_characters() -> None:
     assert normalize_name("-Leer 2 ÑANDÚ") == "-Leer 2 ÑANDÚ"
+
+
+# --- T05: name validation (RF-0) ---
+
+
+def test_rf0_validate_accepts_normal_name() -> None:
+    assert validate_name("  Leer  ") == "Leer"
+
+
+def test_rf0_validate_rejects_empty_name() -> None:
+    with pytest.raises(InvalidNameError) as exc_info:
+        validate_name("")
+    assert exc_info.value.reason == "está vacío"
+
+
+def test_rf0_validate_rejects_only_spaces() -> None:
+    with pytest.raises(InvalidNameError) as exc_info:
+        validate_name("      ")
+    assert exc_info.value.reason == "está vacío"
+
+
+def test_rf0_validate_accepts_fifty_characters() -> None:
+    name = "a" * 50
+    assert validate_name(name) == name
+
+
+def test_rf0_validate_rejects_fifty_one_characters() -> None:
+    with pytest.raises(InvalidNameError) as exc_info:
+        validate_name("a" * 51)
+    assert exc_info.value.reason == "tiene más de 50 caracteres"
+
+
+def test_rf0_validate_rejects_internal_tab() -> None:
+    with pytest.raises(InvalidNameError) as exc_info:
+        validate_name("Leer\tlibro")
+    assert exc_info.value.reason == "contiene caracteres no imprimibles"
+
+
+def test_rf0_validate_accepts_numeric_name() -> None:
+    assert validate_name("2026") == "2026"
+
+
+def test_rf0_validate_accepts_name_starting_with_dash() -> None:
+    assert validate_name("-leer") == "-leer"

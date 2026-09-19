@@ -60,3 +60,23 @@ def normalize_name(raw: str) -> str:
     if current:
         words.append("".join(current))
     return " ".join(words)
+
+
+MAX_NAME_LENGTH = 50
+
+
+def validate_name(raw: str) -> str:
+    """Apply RF-0 validation: normalize and reject an invalid name (E-0).
+
+    A name is invalid when, after normalization, it is empty, has more
+    than MAX_NAME_LENGTH code points, or contains a non-printable
+    character (e.g. a tab).
+    """
+    name = normalize_name(raw)
+    if not name:
+        raise InvalidNameError("está vacío")
+    if len(name) > MAX_NAME_LENGTH:
+        raise InvalidNameError(f"tiene más de {MAX_NAME_LENGTH} caracteres")
+    if not name.isprintable():
+        raise InvalidNameError("contiene caracteres no imprimibles")
+    return name
