@@ -1,8 +1,13 @@
-"""Non-functional requirements (spec 001, RNF-2) and constitution principles 1 and 3."""
+"""Non-functional requirements (spec 001, RNF-2, RNF-5) and constitution principles 1 and 3."""
 
 import ast
 import sys
+import time
+from datetime import date, timedelta
 from pathlib import Path
+
+from habits.cli import main
+from habits.storage import save
 
 PACKAGE_DIR = Path(__file__).resolve().parent.parent / "habits"
 
@@ -77,3 +82,32 @@ def test_core_has_no_io_imports() -> None:
 def test_core_has_no_io_or_clock_calls() -> None:
     called = _called_names(_parse(PACKAGE_DIR / "core.py"))
     assert sorted(called & CORE_FORBIDDEN_CALLS) == []
+
+
+# --- T26: performance (RNF-5) ---
+
+
+def test_rnf5_list_is_fast_with_many_habits_and_years(tmp_path, monkeypatch, capsys) -> None:
+    """`list` with 200 habits x 5 years of daily history stays under 1 second."""
+    today = date(2026, 9, 19)
+    start = today - timedelta(days=5 * 365)
+    days = [
+        (start + timedelta(days=i)).isoformat() for i in range((today - start).days + 1)
+    ]
+    data = {
+        "version": 1,
+        "habits": [
+            {"name": f"Hábito {i:03d}", "done": list(days)} for i in range(200)
+        ],
+    }
+    path = tmp_path / "habits.json"
+    save(path, data)
+    monkeypatch.setenv("HABITS_FILE", str(path))
+
+    started = time.perf_counter()
+    code = main(["list"], today=today)
+    elapsed = time.perf_counter() - started
+
+    capsys.readouterr()
+    assert code == 0
+    assert elapsed < 1.0

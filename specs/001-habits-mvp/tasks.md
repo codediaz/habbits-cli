@@ -107,13 +107,38 @@ Referencias: `spec.md` y `plan.md` de esta carpeta. Cada tarea dura como máximo
 
 ## Fase 4 — Cierre
 
-- [ ] **T26 · Test de rendimiento (RNF-5)** — RF: RNF-5
+- [x] **T26 · Test de rendimiento (RNF-5)** — RF: RNF-5
   Hecho cuando: un test que genera 200 hábitos × 5 años de historial en `tmp_path` ejecuta `main(["list"])` en menos de 1 s.
 
-- [ ] **T27 · Trazabilidad RF→test** — RF: todos
+- [x] **T27 · Trazabilidad RF→test** — RF: todos
   Revisar que cada criterio EARS y cada caso límite de la sección 7 de la spec tiene al menos un test `test_rf<N>_…`.
   Hecho cuando: `pytest -q --collect-only` lista al menos un test para cada RF-0…RF-10, y cada caso límite está enlazado a un test en un comentario de esta tarea.
 
-- [ ] **T28 · Prueba manual de extremo a extremo** — RF: todos
+  **RF → nº de tests** (de `pytest -q --collect-only`): RF-0: 21 · RF-1: 5 · RF-2: 3 · RF-3: 4 · RF-4: 11 · RF-5: 5 · RF-6: 19 · RF-7: 9 · RF-8: 6 · RF-9: 21 · RF-10: 10 · RNF-2: 5 (imports/llamadas) · RNF-5: 1 (rendimiento). RNF-1 (español) y RNF-3 (`today` como entrada) no tienen test propio: se comprueban dentro de los tests de cada RF, que fijan el texto exacto en español y siempre pasan `today`/`day` como parámetro. RNF-4 es este propio criterio de trazabilidad.
+
+  **Casos límite (spec, sección 7) → test:**
+  1. Espacios extremos/tabuladores/Unicode/internos → `test_rf0_normalize_strips_edge_spaces`, `_collapses_internal_spaces`, `_treats_unicode_spaces_as_spaces`, `_keeps_internal_tab`, `_keeps_edge_tab`
+  2. Mayúsculas/ß-ss/acentos/NFC-NFD → `test_rf0_name_key_equal_case`, `_eszett_equals_ss`, `_accents_are_distinct`, `_nfc_equals_nfd`
+  3. Nombre de 50 (válido) y 51 (rechazado); tabulador interno → `test_rf0_validate_accepts_fifty_characters`, `_rejects_fifty_one_characters`, `_rejects_internal_tab`
+  4. Nombre con "-" tras `--`; nombre numérico → `test_rf0_add_name_after_double_dash`, `test_rf10_add_dash_name_without_separator_exits_2`, `test_rf0_validate_accepts_numeric_name`, `_accepts_name_starting_with_dash`
+  5. Marcar dos veces el mismo día → `test_rf3_mark_done_twice_returns_false_without_changes`, `test_rf3_done_twice_shows_warning_and_exits_0`
+  6. Racha con hoy sin marcar y ayer marcado → `test_rf6_streak_kept_when_today_unmarked_but_yesterday_marked`
+  7. Hueco de un día → `test_rf6_streak_broken_by_one_day_gap`
+  8. Historial desordenado → `test_rf6_streak_ignores_input_order`, `test_rf9_mark_done_keeps_done_sorted`
+  9. Cambio de mes/año y 29 de febrero → `test_rf6_streak_crosses_month_boundary`, `_crosses_year_boundary`, `_leap_day`
+  10. Racha de varios años → `test_rf6_streak_three_years`
+  11. Desmarcar en mitad de una racha → `test_rf6_streak_unmark_middle_breaks_it`
+  12. Desmarcar hoy con ayer marcado → `test_rf6_streak_unmark_today_counts_up_to_yesterday`
+  13. Fechas límite y de formato → `test_rf4_parse_date_rejects_nonexistent_day`, `_rejects_invalid_month`, `_rejects_missing_leading_zeros`, `_rejects_before_lower_bound`, `_rejects_future`, `_accepts_today`, `_accepts_lower_bound`
+  14. Fechas futuras ya guardadas → `test_rf6_streak_ignores_future_dates`
+  15. "Hoy" fijado al empezar la ejecución → garantizado por diseño (`main(today=...)` se calcula una sola vez con `date.today()`, ver `habits/cli.py`); no hay un test que cruce la medianoche real, porque exigiría mockear el reloj del sistema en `cli.py`, algo que RNF-3 solo pide para el núcleo.
+  16. Borrar/renombrar inexistente; renombrar a vacío → `test_rf7_rename_missing_habit_raises`, `_to_empty_name_rejected`, `test_rf8_remove_missing_habit_raises`
+  17. Renombrar al propio nombre con otras mayúsculas → `test_rf7_rename_to_own_name_with_different_case_is_accepted`
+  18. Confirmación de borrado (S/ s /si/sí/vacío/EOF/Ctrl+C) → `test_rf8_delete_confirmed_removes_habit[s|S| s ]`, `test_rf8_delete_declined_cancels[n|si|sí|""]`, `test_rf8_delete_eof_cancels`, `test_rf8_delete_ctrl_c_exits_130`
+  19. Archivo inexistente/vacío/JSON inválido/BOM/otra codificación/fechas o nombres repetidos → `test_rf9_load_missing_file_returns_empty`, `_load_empty_file_is_corrupt`, `_load_invalid_json_is_corrupt`, `_load_accepts_bom`, `_load_wrong_encoding_is_corrupt`, `_load_duplicate_date_in_habit_is_corrupt`, `_load_duplicate_equivalent_names_is_corrupt`
+  20. Directorio inexistente; sin permisos de escritura → `test_rf9_save_creates_missing_directory`, `test_rf9_save_without_permission_raises_storage_write_error`
+  21. Interrupción durante el guardado → `test_rf9_save_failure_keeps_original_intact` (simula el fallo de `os.replace` a mitad del guardado)
+
+- [x] **T28 · Prueba manual de extremo a extremo** — RF: todos
   Con `HABITS_FILE=/tmp/h.json`, ejecutar `add`, `done`, `done --date`, `list`, `undo`, `rename` y `delete`.
   Hecho cuando: las salidas coinciden con la tabla de mensajes y `pytest -q` pasa entero.
