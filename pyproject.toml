@@ -1,0 +1,9 @@
+[project]
+name = "habits-cli"
+version = "0.1.0"
+description = "CLI para registrar hábitos de estudio y calcular rachas."
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
